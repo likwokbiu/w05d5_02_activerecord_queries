@@ -1,0 +1,56 @@
+Part 1
+======
+Question 1:-
+Album.where("artist_id = ?", Artist.find_by(name: "Queen").id)
+
+Question 2:
+Track.where("media_type_id = ?", MediaType.find_by(name: "Protected MPEG-4 video file").id).size
+
+Question 3:
+Genre.find_by(name: "Hip Hop/Rap")
+
+Question 4:
+Track.where("genre_id = ?", Genre.find_by(name: "Hip Hop/Rap").id).size
+
+Question 5:
+Track.all.sum("milliseconds")
+
+Question 6:
+Track.where("media_type_id = ?", MediaType.find_by(name: "MPEG audio file").id).maximum("unit_price")
+
+Question: 7
+Track.where("media_type_id = ?", MediaType.find_by(name: "MPEG audio file").id).where("unit_price = ?", Track.where("media_type_id = ?", MediaType.find_by(name: "MPEG audio file").id).maximum("unit_price"))
+
+Question: 8
+Artist.where("created_at = ?", Artist.minimum("created_at"))
+
+Question 9:
+Track.where("genre_id = ?", Genre.find_by(name: "Electronica/Dance").id).where("unit_price = ?", Track.where("genre_id = ?", Genre.find_by(name: "Electronica/Dance").id).minimum("unit_price"))
+
+Question 10:
+Track.where("media_type_id = ?", MediaType.find_by(name: "MPEG audio file").id).where("genre_id = ?", Genre.find_by(name: "Electronica/Dance").id)
+
+Stretch: More Active Record Query Interface
+===========================================
+Question 1:
+Album.where("title like ?",'B%')
+
+Question 2:
+Artist.where("name like ?", 'A%')
+
+Stretch: Querying the Chinook Database using SQL
+================================================
+Question 1:
+SELECT * FROM albums WHERE artist_id = (SELECT id FROM artists WHERE name = 'Queen');
+
+Question 2:
+SELECT COUNT(id) FROM tracks WHERE media_type_id = (SELECT id FROM media_types WHERE name = 'Protected MPEG-4 video file');
+
+Question 3:
+SELECT * FROM tracks WHERE genre_id = (SELECT id FROM genres WHERE name = 'Electronica/Dance') AND unit_price = (SELECT MIN(unit_price) FROM tracks WHERE genre_id = (SELECT id FROM genres WHERE name = 'Electronica/Dance'));
+
+Question 4:
+SELECT * FROM artists WHERE name LIKE 'A%';
+
+Question 5:
+SELECT * FROM tracks WHERE id IN (SELECT track_id FROM playlists_tracks WHERE playlist_id = 1);
